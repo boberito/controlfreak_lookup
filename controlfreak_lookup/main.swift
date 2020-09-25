@@ -22,4 +22,4 @@ if arguments[1] == "-h" {
     exit(0)
 }
 
-controlfreak.lookup(control: arguments[1])
+controlfreak.lookup(control: arguments[1].uppercased())
