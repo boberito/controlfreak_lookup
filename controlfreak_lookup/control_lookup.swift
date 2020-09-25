@@ -34,7 +34,6 @@ class ControlLookup {
             
             if (error != nil) {
                 DispatchQueue.main.async {
-                    
                     print("An Error Occured")
                 }
             } else {
@@ -44,13 +43,12 @@ class ControlLookup {
                         let decoder = JSONDecoder()
                         
                         if let decodedControl = try? decoder.decode(controlData.self, from: dataReturn!) {
-                            let something = decodedControl.control.statements
-                            //                            print(something)
-                            for item in something{
-                                print(item.description)
+                            let items = decodedControl.control.statements
+                            for item in items{
+                                print(item.number + ": " + item.description)
+                                
                             }
-                            //                            print(something.description)
-                            
+                            print("------------------")
                             if decodedControl.control.is_baseline_impact_low{
                                 print("Low Baseline")
                             }
@@ -67,14 +65,11 @@ class ControlLookup {
                         
                         dispatchGroup.leave()
                         
-                    case 404:
-                        print("Rule Not Found")
-                        dispatchGroup.leave()
                     case 500:
-                        print("Rule Not Found")
+                        print("Control Not Found")
                         dispatchGroup.leave()
                     default:
-                        print("error")
+                        print("Error with URL or Server")
                         dispatchGroup.leave()
                     }
                 } 

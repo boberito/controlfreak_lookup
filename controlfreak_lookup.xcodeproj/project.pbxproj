@@ -251,6 +251,7 @@
 		7399AB7D251D30B10007BBCF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2WUMX954UB;
 				ENABLE_HARDENED_RUNTIME = YES;
