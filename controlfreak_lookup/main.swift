@@ -22,4 +22,8 @@ if arguments[1] == "-h" {
     exit(0)
 }
 
+//if arguments[1] == "-r5" {
+    //
+//}
+
 controlfreak.lookup(control: arguments[1].uppercased())

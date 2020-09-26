@@ -8,6 +8,10 @@
 
 import Foundation
 
+#if os(Linux)
+import FoundationNetworking
+#endif
+
 class ControlLookup {
     func lookup(control: String) {
         
@@ -19,9 +23,8 @@ class ControlLookup {
         fullURL = fullURL.replacingOccurrences(of: " ", with: "%20")
         let headers = ["Accept": "application/json"]
         
-        let request = NSMutableURLRequest(url: NSURL(string: fullURL)! as URL,
-                                          cachePolicy: .useProtocolCachePolicy,
-                                          timeoutInterval: 10.0)
+        var request = URLRequest(url: URL(string: fullURL)!)
+
         request.httpMethod = "GET"
         request.allHTTPHeaderFields = headers
         let dispatchGroup = DispatchGroup()
