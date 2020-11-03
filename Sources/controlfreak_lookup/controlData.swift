@@ -27,3 +27,31 @@ struct controlData: Decodable {
         }
     }
 }
+
+struct controlDataFive: Decodable {
+    let control: ControlInfo
+
+    struct ControlInfo:Decodable {
+        let label: String
+        let title: String
+        let is_low: Bool
+        let is_moderate: Bool
+        let is_high: Bool
+        let is_privacy: Bool
+        
+        let parameters: [Parameters]
+        struct Parameters: Decodable {
+            let number: String
+            let label: String
+        }
+        
+        let parts: [Parts]
+        struct Parts: Decodable {
+            let label: String
+            let prepend: String?
+            let prose: String?
+        }
+
+    }
+}
+
