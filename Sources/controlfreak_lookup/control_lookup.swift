@@ -13,8 +13,7 @@ import FoundationNetworking
 #endif
 
 class ControlLookup {
-    func lookup(control: String) {
-        
+    func lookup(control: String, _ showAll: Bool) {
         let baseURL = "https://controlfreak.risk-redux.io/controls/"
         var fullURL = baseURL + control
         
@@ -66,6 +65,12 @@ class ControlLookup {
                             if !decodedControl.control.is_baseline_impact_low && !decodedControl.control.is_baseline_impact_moderate && !decodedControl.control.is_baseline_impact_high {
                                 print("Not on any Baseline")
                             }
+                            
+                            
+                            if showAll {
+                                print("------------------")
+                                print(decodedControl.control.supplement.description)
+                            }
                         }
                         
                         dispatchGroup.leave()
@@ -86,7 +91,7 @@ class ControlLookup {
     }
     
     
-    func lookup5(control: String) {
+    func lookup5(control: String, _ showAll: Bool = false) {
         var modifiedControl = ""
         let baseURL = "https://controlfreak5.risk-redux.io/controls/"
         if let controlNumber = Int(control.components(separatedBy: "-")[1]) {
@@ -159,10 +164,12 @@ class ControlLookup {
                             if !decoded5Control.control.is_low && !decoded5Control.control.is_moderate && !decoded5Control.control.is_high && !decoded5Control.control.is_privacy {
                                 print("Not on any Baseline")
                             }
-                            print("------------")
-                            if let guidance = guidance {
-                                print()
-                                print(guidance)
+                            if showAll {
+                                print("------------")
+                                if let guidance = guidance {
+                                    print()
+                                    print(guidance)
+                                }
                             }
                             
                         }

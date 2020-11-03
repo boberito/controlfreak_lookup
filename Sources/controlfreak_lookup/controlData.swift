@@ -20,12 +20,22 @@ struct controlData: Decodable {
         let is_baseline_impact_moderate: Bool
         let is_baseline_impact_high: Bool
         
+        
         let statements: [Statements]
         struct Statements: Decodable {
             let number: String
             let description: String
         }
+        
+        let supplement: Supplemental
+        
+        struct Supplemental: Decodable {
+            let description: String
+            
+        }
     }
+    
+    
 }
 
 struct controlDataFive: Decodable {
