@@ -13,6 +13,8 @@ import FoundationNetworking
 #endif
 
 class ControlLookup {
+    
+    //rev 4 lookup method
     func lookup(control: String, _ showAll: Bool) {
         let baseURL = "https://controlfreak.risk-redux.io/controls/"
         var fullURL = baseURL + control
@@ -90,26 +92,32 @@ class ControlLookup {
         dispatchGroup.wait()
     }
     
-    
+    //rev 5 lookup method
     func lookup5(control: String, _ showAll: Bool = false) {
         var modifiedControl = ""
         let baseURL = "https://controlfreak5.risk-redux.io/controls/"
-        if let controlNumber = Int(control.components(separatedBy: "-")[1]) {
+        if let controlNumber = Int(control.components(separatedBy: "-")[1].replacingOccurrences(of: " ", with: "")) {
             if controlNumber <= 9 {
                 modifiedControl = control.components(separatedBy: "-")[0] + "-0" + String(controlNumber)
             } else {
                 modifiedControl = control
             }
+        } else if let controlNumber = Int(control.components(separatedBy: "-")[1].components(separatedBy: "(")[0].replacingOccurrences(of: " ", with: "")), let subcontrol = Int(control.components(separatedBy: "(")[1].replacingOccurrences(of: ")", with: "")) {
+            if controlNumber <= 9 && subcontrol <= 9 {
+                modifiedControl = control.components(separatedBy: "-")[0] + "-0" + String(controlNumber) + "(0" + String(subcontrol) + ")"
+            } else if controlNumber < 9 && subcontrol <= 9 {
+                modifiedControl = control.components(separatedBy: "-")[0] + "-" + String(controlNumber) + "(0" + String(subcontrol) + ")"
+            } else if controlNumber <= 9 && subcontrol < 9 {
+                modifiedControl = control.components(separatedBy: "-")[0] + "-" + String(controlNumber) + "(" + String(subcontrol) + ")"
+            } else {
+                modifiedControl = control
+            }
         }
         
-        var fullURL = baseURL + modifiedControl
-        
-        
-        fullURL = fullURL.replacingOccurrences(of: "(", with: " (")
-        fullURL = fullURL.replacingOccurrences(of: "  (", with: " (")
-        fullURL = fullURL.replacingOccurrences(of: " ", with: "%20")
+        let fullURL = baseURL + modifiedControl
+
         let headers = ["Accept": "application/json"]
-        
+//        print(fullURL)
         var request = URLRequest(url: URL(string: fullURL)!)
         
         request.httpMethod = "GET"
@@ -136,16 +144,24 @@ class ControlLookup {
                             print(decoded5Control.control.title)
                             var guidance: String?
                             for part in decoded5Control.control.parts {
-                                if part.label == "item" {
-                                    print(part.prepend! + part.prose!)
+                                if part.label == "item", let prepend = part.prepend, let prose = part.prose {
+                                    print(prepend + " " + prose.replacingOccurrences(of: "\n                     ", with: ""))
+                                }
+                                if part.label == "statement", let prose = part.prose {
+                                    print(prose.replacingOccurrences(of: "\n                     ", with: ""))
                                 }
                                 if part.label == "guidance" {
                                     guidance = part.prose
                                 }
                             }
                             for params in decoded5Control.control.parameters {
-                                print(params.number + "\t" + params.label)
-                                
+                                if let label = params.label, let number = params.number {
+                                    print(number + "\t" + label)
+                                }
+                                if let number = params.number, let alternatives = params.alternatives {
+                                    print(number + "\t" + alternatives.replacingOccurrences(of: "[", with: "").replacingOccurrences(of: "]", with: "").replacingOccurrences(of: ", ", with: "\n\t\t").replacingOccurrences(of: "  ", with: "").replacingOccurrences(of: "\\n", with:"" ))
+                                }
+
                             }
                             print()
                             print("------------")

@@ -51,8 +51,10 @@ struct controlDataFive: Decodable {
         
         let parameters: [Parameters]
         struct Parameters: Decodable {
-            let number: String
-            let label: String
+            let number: String?
+            let label: String?
+            let selection: String?
+            let alternatives: String?
         }
         
         let parts: [Parts]
