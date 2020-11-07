@@ -4,9 +4,12 @@
 
 The idea is to create a tool that can quickly lookup NIST 800-53 rev4 and rev5 controls on http://controlfreak.risk-redux.io and http://controlfreak5.risk-redux.io from the command line.
 
-## Building
+## Supported OS
+### macOS
+- Tested on macOS 10.15
 
-The project was built on macOS 10.15.6.
+### linux
+- Tested on Ubuntu 20.04
 
 ## Usage
 
@@ -21,3 +24,7 @@ OPTIONS:
   --show-all
   -h, --help              Show help information.
 ```
+
+## Building
+
+The project was built on macOS 10.15.6.
