@@ -9,6 +9,18 @@
 
 import Foundation
 
+struct controlList: Decodable {
+    
+        let control: Control
+        
+        struct Control: Decodable {
+            let family_name: String?
+            let number: String
+            let title: String
+            let label: String?
+        }
+}
+
 struct controlData: Decodable {
     let control: ControlInfo
     
