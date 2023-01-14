@@ -17,107 +17,28 @@ import FoundationNetworking
 
 
 class ControlLookup {
-    
-    //rev 4 lookup method
-//    func lookup(control: String, _ showAll: Bool) {
-//        let baseURL = "https://controlfreak.risk-redux.io/controls/"
-//        var fullURL = baseURL + control
-//
-//        fullURL = fullURL.replacingOccurrences(of: "(", with: " (")
-//        fullURL = fullURL.replacingOccurrences(of: "  (", with: " (")
-//        fullURL = fullURL.replacingOccurrences(of: " ", with: "%20")
-//        let headers = ["Accept": "application/json"]
-//
-//        var request = URLRequest(url: URL(string: fullURL)!)
-//
-//        request.httpMethod = "GET"
-//        request.allHTTPHeaderFields = headers
-//        let dispatchGroup = DispatchGroup()
-//
-//        dispatchGroup.enter()
-//
-//        let session = URLSession.shared
-//        let task = session.dataTask(with: request as URLRequest) {data,response,error in
-//            let httpResponse = response as? HTTPURLResponse
-//            let dataReturn = data
-//
-//            if (error != nil) {
-//                DispatchQueue.main.async {
-//                    print("An Error Occured")
-//                }
-//            } else {
-//                do {
-//                    switch httpResponse!.statusCode {
-//                    case 200:
-//                        let decoder = JSONDecoder()
-//
-//                        if let decodedControl = try? decoder.decode(controlData.self, from: dataReturn!) {
-//                            print(decodedControl.control.title)
-//                            let items = decodedControl.control.statements
-//                            for item in items{
-//                                print(item.number + ": " + item.description)
-//
-//                            }
-//                            print("------------------")
-//                            if decodedControl.control.is_baseline_impact_low{
-//                                print("Low Baseline")
-//                            }
-//                            if decodedControl.control.is_baseline_impact_moderate{
-//                                print("Moderate Baseline")
-//                            }
-//                            if decodedControl.control.is_baseline_impact_high{
-//                                print("High Baseline")
-//                            }
-//                            if !decodedControl.control.is_baseline_impact_low && !decodedControl.control.is_baseline_impact_moderate && !decodedControl.control.is_baseline_impact_high {
-//                                print("Not on any Baseline")
-//                            }
-//
-//
-//                            if showAll {
-//                                print("------------------")
-//                                print(decodedControl.control.supplement.description)
-//                            }
-//                        }
-//
-//                        dispatchGroup.leave()
-//
-//                    case 500:
-//                        print("Control Not Found")
-//                        dispatchGroup.leave()
-//                    default:
-//                        print("Error with URL or Server")
-//                        dispatchGroup.leave()
-//                    }
-//                }
-//
-//            }
-//        }
-//        task.resume()
-//        dispatchGroup.wait()
-//    }
+
     
     //rev 5 lookup method
     func lookup5(control: String, _ showAll: Bool = false) {
         var modifiedControl = ""
         let baseURL = "https://controlfreak.risk-redux.io/controls/"
-//        if let controlNumber = Int(control.components(separatedBy: "-")[1].replacingOccurrences(of: " ", with: "")) {
-//            if controlNumber <= 9 {
-//                modifiedControl = control.components(separatedBy: "-")[0] + "-" + String(controlNumber)
-//            } else {
-//                modifiedControl = control
-//            }
-//        } else if let controlNumber = Int(control.components(separatedBy: "-")[1].components(separatedBy: "(")[0].replacingOccurrences(of: " ", with: "")), let subcontrol = Int(control.components(separatedBy: "(")[1].replacingOccurrences(of: ")", with: "")) {
-//            if controlNumber <= 9 && subcontrol <= 9 {
-//                modifiedControl = control.components(separatedBy: "-")[0] + "-" + String(controlNumber) + "(0" + String(subcontrol) + ")"
-//            } else if controlNumber < 9 && subcontrol <= 9 {
-//                modifiedControl = control.components(separatedBy: "-")[0] + "-" + String(controlNumber) + "(0" + String(subcontrol) + ")"
-//            } else if controlNumber <= 9 && subcontrol < 9 {
-//                modifiedControl = control.components(separatedBy: "-")[0] + "-" + String(controlNumber) + "(" + String(subcontrol) + ")"
-//            } else {
-//                modifiedControl = control
-//            }
-//        }
-        modifiedControl = control.replacingOccurrences(of: " ", with: "")
+        modifiedControl = control.replacingOccurrences(of: " ", with: ""    )
+        
+        let family = modifiedControl.components(separatedBy: "-")[0]
+        var base = modifiedControl.components(separatedBy: "(")[0].components(separatedBy: "-")[1]
+        var enhancement = modifiedControl.components(separatedBy: "(")[1].components(separatedBy:")")[0]
+        if base.count <= 2 {
+            base = "0\(base)"
+        }
+        modifiedControl = "\(family)-\(base)"
+        if enhancement != "" {
+            if enhancement.count < 2 {
+                enhancement = "0\(enhancement)"       
+            }
+        modifiedControl = "\(family)-\(base)(\(enhancement))"
+        }
+        
         let fullURL = baseURL + modifiedControl
         print(fullURL)
         let headers = ["Accept": "application/json"]
