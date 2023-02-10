@@ -25,19 +25,23 @@ class ControlLookup {
         let baseURL = "https://controlfreak.risk-redux.io/controls/"
         modifiedControl = control.replacingOccurrences(of: " ", with: ""    )
         
+        
         let family = modifiedControl.components(separatedBy: "-")[0]
-        var base = modifiedControl.components(separatedBy: "(")[0].components(separatedBy: "-")[1]
-        var enhancement = modifiedControl.components(separatedBy: "(")[1].components(separatedBy:")")[0]
-        if base.count <= 2 {
-            base = "0\(base)"
-        }
-        modifiedControl = "\(family)-\(base)"
-        if enhancement != "" {
-            if enhancement.count < 2 {
-                enhancement = "0\(enhancement)"       
+        if modifiedControl.contains("("){
+            var base = modifiedControl.components(separatedBy: "(")[0].components(separatedBy: "-")[1]
+            var enhancement = modifiedControl.components(separatedBy: "(")[1].components(separatedBy:")")[0]
+            if base.count <= 2 {
+                base = "0\(base)"
             }
-        modifiedControl = "\(family)-\(base)(\(enhancement))"
+            modifiedControl = "\(family)-\(base)"
+            if enhancement != "" {
+                if enhancement.count < 2 {
+                    enhancement = "0\(enhancement)"
+                }
+            modifiedControl = "\(family)-\(base)(\(enhancement))"
+            }
         }
+        
         
         let fullURL = baseURL + modifiedControl
         print(fullURL)
